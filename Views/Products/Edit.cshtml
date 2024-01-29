@@ -1,0 +1,69 @@
+﻿@* @model OnlineShopCMS.Models.Product  *@
+@model OnlineShopCMS.Models.DetailViewModel 
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="product.Name" class="control-label"></label>
+                <input asp-for="product.Name" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="product.Description" class="control-label"></label>
+                <textarea asp-for="product.Description" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="product.Content" class="control-label"></label>
+                <textarea asp-for="product.Content" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label asp-for="product.Price" class="control-label"></label>
+                <input asp-for="product.Price" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="product.Stock" class="control-label"></label>
+                <input asp-for="product.Stock" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="imgsrc" class="control-label"></label>
+                <input type="file" name="myimg" id="myimg" class="form-control-file">
+                <span asp-validation-for="imgsrc" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Category</label>
+                <select class="form-control" asp-for="product.CategoryId" asp-items="ViewBag.Categories"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Edit" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<img id="preview" style="max-height:200px;" />
+<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
+<script>
+    $('#myimg').on('change', function (e) {
+        const file = this.files[0];
+        const objectURL = URL.createObjectURL(file);    // 使用 createObjectURL 產生圖片url
+        $('#preview').attr('src', objectURL);
+    });
+</script>

@@ -1,0 +1,290 @@
+﻿@model List<OnlineShopCMS.Models.CartItem>
+
+@{
+	ViewData["Title"] = "購物車";
+}
+
+
+<!--Progress Indicator-->
+
+<ol class="progress-indicator">
+	<li class="completed">
+		<span class="bubble"></span>
+		查看購物車
+	</li>
+	<li>
+		<span class="bubble"></span>
+		確認訂單訊息
+	</li>
+	<li>
+		<span class="bubble"></span>
+		支付訂單
+	</li>
+	<li>
+		<span class="bubble"></span>
+		完成訂單
+	</li>
+</ol>
+
+<h2>購物車</h2>
+
+@if (Model != null && Model.Count > 0)
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>商品名称</th>
+				<th>数量</th>
+				<th>小计</th>
+				@* <th>商品图片</th> *@
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>@item.Product.Name</td>
+					<td>@item.Amount</td>
+					<td>@item.SubTotal</td>
+					@* <td>
+			<img src="@item.imageSrc" alt="商品图片" style="width: 100px; height: auto;" />
+			</td> *@
+					<td>
+						<a asp-action="RemoveItem" asp-route-id="@item.Product.Id" class="btn btn-danger">移除</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<div>
+		<h3>总金额: @ViewBag.Total</h3>
+	</div>
+}
+else
+{
+	<p>您的购物车是空的！</p>
+}
+
+<div class="button-container">
+	<div class="left-buttons">
+		<a asp-action="Index" asp-controller="Products" class="btn btn-primary">继续购物</a>
+		<a asp-action="Checkout" asp-controller="Order" class="btn btn-success">结账</a>
+	</div>
+	<div class="right-buttons">
+		<div id="payment-button">
+			@* <button class="paypal-button">PayPal</button>
+			<button class="card-button">Debit or Credit Card</button> *@
+		</div>
+	</div>
+</div>
+
+@section Scripts {
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=AUfdEdd1nzVBlJr_vakk6ErJ2nTu6iK95g9igLxNlZM6-Po5jgdfgm-ITQrk1ts90yZgA__tRg-yeFFq"></script>
+	<script>
+		// 如果需要，此处可以添加JavaScript代码
+		/* paypal付款按紐 */
+		/* // Render the PayPal button into #paypal-button-container */
+		// console.log(paypal);
+		paypal.Buttons({
+
+			/*  Set up the transaction */
+			createOrder: function (data, actions) {
+				return actions.order.create({
+					purchase_units: [{
+						amount: {
+							value: '88.44'
+						}
+					}]
+				});
+			},
+
+			/* // Finalize the transaction */
+			onApprove: function (data, actions) {
+				return actions.order.capture().then(function (orderData) {
+					console.log('Capture result', orderData,
+						JSON.stringify(orderData, null, 2));
+				});
+			}
+		}).render('#payment-button');
+	</script>
+}
+
+<style>
+	.progress-indicator {
+		counter-reset: step;
+		list-style: none;
+		padding: 0;
+		display: flex;
+		justify-content: space-between;
+		margin: 0;
+	}
+
+		.progress-indicator li {
+			text-align: center;
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			flex: 1; /* Ensure equal spacing */
+		}
+
+			.progress-indicator li::before {
+				content: counter(step);
+				counter-increment: step;
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+				border: 2px solid #7d7d7d;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				margin: 0 auto;
+				border-radius: 50%;
+				background-color: white;
+				color: #7d7d7d;
+				font-size: 14px;
+				z-index: 2;
+			}
+
+			.progress-indicator li::after {
+				content: '';
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: -50%;
+				right: -50%;
+				height: 2px;
+				background-color: #7d7d7d;
+				z-index: 1;
+			}
+
+			.progress-indicator li:first-child::after {
+				left: 50%;
+			}
+
+			.progress-indicator li:last-child::after {
+				right: 50%;
+			}
+
+			.progress-indicator li.completed {
+				color: green;
+			}
+
+				.progress-indicator li.completed::before {
+					content: '✓';
+					color: white;
+					background-color: green;
+					border-color: green;
+				}
+
+				.progress-indicator li.completed + li::after {
+					background-color: green;
+				}
+
+			/* 连接线不应该在最后一个元素之后显示 */
+			.progress-indicator li:last-child::after {
+				content: none;
+			}
+
+			/* The text of the steps */
+			.progress-indicator li span {
+				color: #7d7d7d;
+				font-size: 14px;
+				text-transform: uppercase;
+				margin-top: 8px;
+			}
+
+
+	/* paypal button */
+	.button-container {
+		display: flex;
+		justify-content: flex-start;
+		align-items: center;
+		padding: 10px;
+	}
+
+	.left-buttons a,
+	.right-buttons button {
+		padding: 10px 15px;
+		margin-right: 10px;
+		border: none;
+		color: #fff;
+		font-size: 16px;
+		border-radius: 5px;
+		cursor: pointer;
+		text-decoration: none;
+		display: inline-block;
+	}
+
+	.left-buttons .btn-primary {
+		background-color: #007bff;
+	}
+
+	.left-buttons .btn-success {
+		background-color: #28a745;
+	}
+
+	.right-buttons .paypal-button {
+		background-color: #ffc439;
+		border: 1px solid #ffc439;
+	}
+
+	.right-buttons .card-button {
+		background-color: #333;
+		border: 1px solid #333;
+	}
+
+	/* Ensure the last button doesn't have a margin on the right */
+	.left-buttons a:last-child,
+	.right-buttons button:last-child {
+		margin-right: 0;
+	}
+
+
+	.button-container {
+		display: flex;
+		justify-content: space-between; /* This will push the .left-buttons to the left and .right-buttons to the right */
+		align-items: center;
+		padding: 10px;
+		width: 100%; /* Set the width to 100% of its parent container */
+	}
+
+	.left-buttons a {
+		padding: 10px 15px;
+		margin-right: 10px; /* Adjust the right margin as needed */
+		border: none;
+		color: #fff;
+		font-size: 16px;
+		border-radius: 5px;
+		cursor: pointer;
+		text-decoration: none;
+	}
+
+	.right-buttons {
+		display: flex;
+		align-items: center;
+	}
+
+		.right-buttons .paypal-button,
+		.right-buttons .card-button {
+			padding: 10px 15px;
+			margin-left: 10px; /* Add some space between the PayPal and card buttons */
+			border: none;
+			color: #fff;
+			font-size: 16px;
+			border-radius: 5px;
+			cursor: pointer;
+			text-decoration: none;
+			background-color: #ffc439; /* Set the background color for PayPal button */
+		}
+
+		.right-buttons .card-button {
+			background-color: #333; /* Set the background color for Debit/Credit card button */
+		}
+
+</style>

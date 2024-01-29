@@ -1,0 +1,93 @@
+﻿@model OnlineShopCMS.Models.DetailViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="row">
+        <div>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.imgsrc)
+        </dt>
+        <dd class="col-sm-2">
+            <img src="@Html.DisplayFor(model => model.imgsrc)" class="small-image" />    
+        </dd>
+        </div>
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.product.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.product.Name)            
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.product.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.product.Description)     
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.product.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.product.Price)           
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.product.Stock)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.product.Stock)           
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.product.Content)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.Raw(Model.product.Content)                          
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.product.Id">Edit</a>   |
+    <a asp-action="Delete" asp-route-id="@Model.product.Id">Delete</a>  |
+    <a asp-action="Index">回到首頁</a>
+</div>
+
+@* 商品詳細頁留言板 *@
+<div>
+    <form class="input-group" asp-action="AddComment" asp-route-Id="@Model.product.Id">
+        <textarea class="form-control" type="text"
+                  placeholder="請先登入再留言" name="myComment"></textarea>
+        <input class="btn btn-sm btn-primary" type="submit" value="送出" />
+    </form>
+</div>
+
+<p class="alert-light m-0">共 @Model.product.Comments.Count 則留言</p>
+<div>
+    @foreach (var comment in Model.product.Comments)
+    {
+        <div class="row m-3">
+            <div class="col-1"><img src="~/image/person.png" /></div>
+            <div class="col-11" style="background-color: #f8f9fa">
+                <p>
+                    <span class="font-weight-bold">@comment.UserName</span>
+                    <span class="text-muted">． @comment.Time</span>
+                </p>
+                <p>@comment.Content</p>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+
+        .small-image {
+    width: 300px; /* 或者您想要的任何宽度 */
+    height: auto; /* 保持纵横比 */
+}
+</style>
