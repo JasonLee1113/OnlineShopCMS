@@ -31,7 +31,12 @@ namespace OnlineShopCMS.Controllers
 				ViewBag.Total = 0;
 			}
 
-			return View(CartItems);
+            if (HttpContext.Session.GetString("UserSession") != null)           //判斷 登入變logout、登出變login
+            {
+                ViewData["MySession"] = HttpContext.Session.GetString("UserSession").ToString();
+            }
+
+            return View(CartItems);
 		}
 
 		public IActionResult AddToCart(int id)

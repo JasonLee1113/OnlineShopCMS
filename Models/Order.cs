@@ -9,7 +9,7 @@
         public string UserName { get; set; }           //付款者帳號
 
         public string ReceiverName { get; set; }       //收貨者姓名
-        public string ReceiverAdress { get; set; }     //收貨者地址
+        public string ReceiverAddress { get; set; }     //收貨者地址
         public string ReceiverPhone { get; set; }      //收貨者電話
 
         public int Total { get; set; }                 //訂單總額

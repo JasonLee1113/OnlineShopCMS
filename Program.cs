@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineShopCMS.Data;
 using Microsoft.AspNetCore.Identity;
-using OnlineShopCMS.Areas.Identity.Data;
 namespace OnlineShopCMS
 {
 	public class Program
@@ -15,32 +14,32 @@ namespace OnlineShopCMS
 			builder.Services.AddDbContext<OnlineShopContext>(options =>
 				options.UseSqlServer(builder.Configuration.GetConnectionString("OnlineShopContext") ?? throw new InvalidOperationException("Connection string 'OnlineShopContext' not found.")));
 
-			builder.Services.AddSession();
+			builder.Services.AddSession();      //註冊Session服務
 
-			//Login DI container
-			builder.Services.AddDbContext<OnlineShopUserContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("OnlineShopUserContext") ?? throw new InvalidOperationException("Connection string 'OnlineShopUserContext' not found.")));
-
-
-			builder.Services.AddDefaultIdentity<OnlineShopUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<OnlineShopUserContext>();
-
-			//builder.Services.AddDefaultIdentity<OnlineShopUser>(options =>
-			//{
-			//	options.Password.RequiredLength = 4;             //密碼長度
-			//	options.Password.RequireLowercase = false;       //包含小寫英文
-			//	options.Password.RequireUppercase = false;       //包含大寫英文
-			//	options.Password.RequireNonAlphanumeric = false; //包含符號
-			//	options.Password.RequireDigit = false;           //包含數字
-			//})
-			//.AddRoles<IdentityRole>() //角色
-			//.AddEntityFrameworkStores<OnlineShopUserContext>();
+            //Login DI container
+            //		builder.Services.AddDbContext<OnlineShopUserContext>(options =>
+            //options.UseSqlServer(builder.Configuration.GetConnectionString("OnlineShopUserContext") ?? throw new InvalidOperationException("Connection string 'OnlineShopUserContext' not found.")));
 
 
+            //		builder.Services.AddDefaultIdentity<OnlineShopUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<OnlineShopUserContext>();
 
-			//builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<OnlineShopUserContext>();
+            //builder.Services.AddDefaultIdentity<OnlineShopUser>(options =>
+            //{
+            //	options.Password.RequiredLength = 4;             //密碼長度
+            //	options.Password.RequireLowercase = false;       //包含小寫英文
+            //	options.Password.RequireUppercase = false;       //包含大寫英文
+            //	options.Password.RequireNonAlphanumeric = false; //包含符號
+            //	options.Password.RequireDigit = false;           //包含數字
+            //})
+            //.AddRoles<IdentityRole>() //角色
+            //.AddEntityFrameworkStores<OnlineShopUserContext>();
 
-			// Add services to the container.
-			builder.Services.AddControllersWithViews();
+
+
+            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<OnlineShopUserContext>();
+
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
 
 			var app = builder.Build();
 
@@ -57,7 +56,7 @@ namespace OnlineShopCMS
 
 			app.UseRouting();
 
-			app.UseSession();
+			app.UseSession();			//註冊Session服務
 
 			app.UseAuthentication();  // .net core identity
 
@@ -72,7 +71,7 @@ namespace OnlineShopCMS
 			//	endpoints.MapRazorPages();
 			//});
 
-			app.MapRazorPages();
+			//app.MapRazorPages();
 
 			app.Run();
 

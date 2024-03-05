@@ -75,6 +75,11 @@ namespace OnlineShopCMS.Controllers
 			}
 			ViewBag.count = dvm.Count;
 
+			if(HttpContext.Session.GetString("UserSession") != null)			//判斷 登入變logout、登出變login
+			{
+				ViewData["MySession"] = HttpContext.Session.GetString("UserSession").ToString();
+			}
+
 			return View(dvm);
 		}
 
@@ -259,14 +264,14 @@ namespace OnlineShopCMS.Controllers
 		}
 
 		[HttpPost]
-		//[Authorize]         //登入才能留言
-		public async Task<IActionResult> AddComment(int Id, string myComment)
+		[Authorize]         //登入才能留言
+		public async Task<IActionResult> AddComment(int Id, string myComment, string Name )				//0301新增Name
 		{
 			var comment = new Comment()
 			{
 				ProductID = Id,
 				Content = myComment,
-				UserName = HttpContext.User.Identity.Name,
+				UserName = Name,
 				Time = DateTime.Now
 			};
 			_context.Add(comment);

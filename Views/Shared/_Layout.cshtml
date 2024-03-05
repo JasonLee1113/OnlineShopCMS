@@ -9,12 +9,17 @@
     <link rel="stylesheet" href="~/OnlineShopCMS.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/fontawesome-free-6.5.1-web/fontawesome-free-6.5.1-web/css/all.css" />
     
+    
     <style>
         .logo {
             width: 150px; /* 或其他您希望的寬度 */
             height: 70px; /* 高度設為auto保持圖片的比例 */
             box-shadow: 0 0 18px rgba(55, 0, 0, 0.8); /* 添加发光效果，您可以调整颜色和模糊半径 */
         }
+
+    /*     #CartButton{
+            margin: 20;
+        } */
         
     </style>
 
@@ -46,17 +51,66 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                    <li class="nav-link">
+                    <h4>Hi~Welcome^^ @ViewData["MySession"]</h4>
+                    </li>
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
-                <form class="d-flex justify-content-end pl-3">
-                    <button class="btn btn-outline-dark" type="submit" asp-area="" asp-controller="Cart" asp-action="Index">
+
+
+                <div class="mb-3"></div>
+
+
+                <form class="d-flex justify-content-end pl-3 flex-row">
+                    <button class="btn btn-outline-dark" id="CartButton" type="submit" asp-area="" asp-controller="Cart" asp-action="Index">
                             <i class="fas fa-shopping-cart"></i>   
                             購物車
                             <span class="badge bg-dark text-white ms-1 rounded-pill"></span>
                     </button>
                 </form>
+                
+                <div class="mb-3">
+                </div>
+                      
+                <div>
+
+                @{
+                    if (ViewData["MySession"] != null)
+                    {
+                        <form class="d-flex justify-content-end pl-3 flex-row">
+                            <button class="btn btn-outline-dark" type="submit" asp-area="" asp-controller="User" asp-action="Logout">
+                                <i class="fa-solid fa-user"></i>
+                                登出
+                            </button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form class="d-flex justify-content-end pl-3 flex-row">
+                            <button class="btn btn-outline-dark" type="submit" asp-area="" asp-controller="User" asp-action="Login">
+                                <i class="fa-solid fa-user"></i>
+                                登入
+                            </button>
+                        </form>
+                    }
+                }
+                </div>
+
+
+      @*    @{
+                    if(ViewData["MySession"] != null)
+                    {
+                        <button class="btn btn-outline-dark"><a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Signup">Logout</a></button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-outline-dark"><a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Login">Login</a></button>
+                    }
+                }   *@
+
             </div>
+       
         </nav>
     </header>
     <div class="container">

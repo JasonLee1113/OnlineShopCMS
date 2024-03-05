@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OnlineShopCMS.Data;
 using OnlineShopCMS.Models;
 using System.Diagnostics;
 
@@ -6,20 +7,33 @@ namespace OnlineShopCMS.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly OnlineShopContext context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(OnlineShopContext context)
         {
-            _logger = logger;
+            this.context = context;
         }
 
         public IActionResult Index()
         {
+            RedirectToAction("Login");
+
+            if (HttpContext.Session.GetString("UserSession") != null)           //判斷 登入變logout、登出變login
+            {
+                ViewData["MySession"] = HttpContext.Session.GetString("UserSession").ToString();
+            }
+
             return View();
         }
 
         public IActionResult Privacy()
         {
+
+            if (HttpContext.Session.GetString("UserSession") != null)           //判斷 登入變logout、登出變login
+            {
+                ViewData["MySession"] = HttpContext.Session.GetString("UserSession").ToString();
+            }
+
             return View();
         }
 
@@ -31,7 +45,17 @@ namespace OnlineShopCMS.Controllers
 
         public IActionResult About()
         {
+            if (HttpContext.Session.GetString("UserSession") != null)           //判斷 登入變logout、登出變login
+            {
+                ViewData["MySession"] = HttpContext.Session.GetString("UserSession").ToString();
+            }
+
             return View();
         }
+
+
+
+
+
     }
 }
